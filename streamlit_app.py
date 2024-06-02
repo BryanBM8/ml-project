@@ -2,39 +2,54 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
-
+import pickle
+import sklearn
+from sklearn.preprocessing import Normalizer
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.pipeline import Pipeline
 """
-# Welcome to Streamlit!
+# ML Project - Student Performance score prediction
 
-Edit `/streamlit_app.py` to customize this app to your heart's desire :heart:.
-If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
-forums](https://discuss.streamlit.io).
-
-In the meantime, below is an example of what you can do with just a few lines of code:
+Anggota:
+- Bryan Mulia
+- Jasson Widiarta
+- Kasimirus Derryl Odja
+- Irving Masahiro
 """
 
-num_points = st.slider("Number of points in spiral", 1, 10000, 1100)
-num_turns = st.slider("Number of turns in spiral", 1, 300, 31)
 
-indices = np.linspace(0, 1, num_points)
-theta = 2 * np.pi * num_turns * indices
-radius = indices
+def random_button_callback():
+    input_df =pd.read_csv('student-mat.csv', sep=';', usecols=['school','sex', 'age', 'address', 'famsize', 'Pstatus', 'Medu', 'Fedu', 'Mjob',
+        'Fjob', 'reason', 'guardian', 'traveltime', 'studytime', 'failures',
+        'schoolsup', 'famsup', 'paid', 'activities', 'nursery', 'higher', 'internet',
+        'romantic', 'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health'])
+    predict(input_df.sample())
 
-x = radius * np.cos(theta)
-y = radius * np.sin(theta)
+def main_render():
+    school = st.selectbox("School:", {"Gabriel Pereira":"GP", "Moushinho da Silveira": "MS"})
+    sex = st.selectbox("Sex:", {"Female":"F", "Male": "M"})
+    age = st.slider("Age", 6,  24)
+    address = st.selectbox("Address:", {"Urban":"U", "Rural": "R"})
+    famsize = st.selectbox("Family Size:", {"Less or equal to 3":"LE3", "Greater than 3": "GT3"})
+    Pstatus = st.selectbox("Parent's cohabitation status:", {"Less or equal to 3":"LE3", "Greater than 3": "GT3"})
+    st.button('random predict', on_click=random_button_callback)
 
-df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "idx": indices,
-    "rand": np.random.randn(num_points),
-})
+def predict(input_df):
+    if 'model' not in st.session_state:
+        st.text("model is not loaded")
+    else:
+        pred = st.session_state.model.predict(input_df)
+        st.text('G3: '+str(pred))
+        
+def main():
+    main_render()
+    if 'model' not in st.session_state:
+        st.session_state.model = pickle.load(open('ridge_model.pkl', 'rb')) 
+    else: 
+        print("model already loaded")
 
-st.altair_chart(alt.Chart(df, height=700, width=700)
-    .mark_point(filled=True)
-    .encode(
-        x=alt.X("x", axis=None),
-        y=alt.Y("y", axis=None),
-        color=alt.Color("idx", legend=None, scale=alt.Scale()),
-        size=alt.Size("rand", legend=None, scale=alt.Scale(range=[1, 150])),
-    ))
+    return 0
+
+if __name__ == '__main__':
+    main()
