@@ -15,7 +15,10 @@ Anggota:
 - Bryan Mulia
 - Jasson Widiarta
 - Kasimirus Derryl Odja
-- Irving Masahiro
+- Joel Wilson Suwanto
+- Irving Masahiro Samin
+
+Repository: [Github](https://github.com/Jasson9/ml-project)
 """
 
 
