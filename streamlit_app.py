@@ -78,8 +78,8 @@ def main_render():
     higher = st.sidebar.selectbox("Wants to take higher education:", higher_options.keys(), 0 if 'higher_idx' not in state else state.higher_idx)
     internet = st.sidebar.selectbox("Internet access at home:", internet_options.keys(), 0 if 'internet_idx' not in state else state.internet_idx)
     goout = st.sidebar.slider("Going out with friends", 1, 5, 1 if 'goout' not in state else state.goout)
-    G1 = st.sidebar.number_input("G1", 0 if 'G1' not in state else state.G1)
-    G2 = st.sidebar.number_input("G2", 0 if 'G2' not in state else state.G2)
+    G1 = st.sidebar.number_input("G1",0,30, 0 if 'G1' not in state else state.G1)
+    G2 = st.sidebar.number_input("G2",0,30, 0 if 'G2' not in state else state.G2)
     input_df = pd.DataFrame({
         'sex' : [sex_options[sex]],
         'age' : [age],
