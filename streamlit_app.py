@@ -31,7 +31,7 @@ scaler_option = st.sidebar.selectbox("Scaler Option:", {"Standard Scaler":"stand
 def random_button_callback(set_value_only=False):
     state = st.session_state;
     input_df =pd.read_csv('student-mat.csv', sep=';', usecols=['sex', 'age', 'address', 'Medu', 'Fedu', 
-     'traveltime', 'failures', 'paid', 'higher', 'internet','goout', 'G1', 'G2'])
+     'traveltime', 'failures', 'paid', 'higher', 'internet','goout', 'G1', 'G2','G3'])
     sample = input_df.sample()
     state = st.session_state;
     state.age = sample['age'].values[0]
@@ -49,7 +49,8 @@ def random_button_callback(set_value_only=False):
     state.G2 = sample['G2'].values[0]
 
     if not set_value_only:
-        predict(sample,model_options[model_option], scaler_options[scaler_option])
+        predict(sample.drop(['G3'],axis=1),model_options[model_option], scaler_options[scaler_option])
+        state.actual_result = sample['G3'].values[0]
 
 scaler_options ={"Standard Scaler":"standard.pkl", "Robust Scaler":"robust.pkl", "MinMax Scaler":"minmax.pkl"}
 model_options = {"Random Forest":"RandomForest.pkl", "SVM":"SVM.pkl", "Gradient Boosting":"gradient_boosting.pkl"}
@@ -99,6 +100,8 @@ def main_render():
     st.sidebar.button('random predict', on_click=random_button_callback)
     if 'result' in st.session_state:
         st.write("prediction result: ",st.session_state.result)
+    # if 'actual_result' in st.session_state and st.session_state.actual_result is not None:
+    #     st.write("actual result: ",st.session_state.actual_result)
         
 
 def pred_all_models(input_df, scaler_option):
@@ -116,31 +119,7 @@ def show_plot():
     y_pred = st.session_state.y_pred
     fig1, ax1 = plt.subplots()
     ax1.bar(model_options.keys(), y_pred)
-    # ax1.xlabel("Model")
-    # ax1.ylabel("Prediction")
-    # ax1.title("Prediction Result")
     st.pyplot(fig1)
-
-
-    # print(y_pred)
-    # fig1, ax1 = plt.subplots()
-    # # ax1.scatter(range(len(y)), y, color='blue', label='Data Aktual')
-    # ax1.scatter(range(len(y_pred)), y_pred, color='red', label='Prediksi', alpha=0.5)
-    # ax1.set_xlabel("Index")
-    # ax1.set_ylabel("Target Value")
-    # ax1.set_title("Prediction vs Actual")
-    # ax1.legend()
-    # st.pyplot(fig1)
-
-    # # Membuat residual plot
-    # residuals = y - y_pred
-    # fig2, ax2 = plt.subplots()
-    # ax2.scatter(y_pred, residuals, color='blue')
-    # ax2.axhline(y=0, color='r', linestyle='--')
-    # ax2.set_xlabel("Predicted")
-    # ax2.set_ylabel("Residuals")
-    # ax2.set_title("Residuals vs Predicted")
-    # st.pyplot(fig2)
 
 def predict(param_df,model_option,scaler_option):
     input_df = param_df.copy()
@@ -160,11 +139,10 @@ def predict(param_df,model_option,scaler_option):
     original_df = pd.read_csv('student-mat.csv', sep=';', usecols=['sex', 'age', 'address', 'Medu', 'Fedu', 
      'traveltime', 'failures', 'paid', 'higher', 'internet','goout', 'G1', 'G2'])
     input_df.address=encoder.fit(original_df.address).transform(input_df.address)
-    input_df.sex=encoder.fit(original_df.sex).fit_transform(input_df.sex)
-    input_df.paid=encoder.fit(original_df.paid).fit_transform(input_df.paid)
-    input_df.higher=encoder.fit(original_df.higher).fit_transform(input_df.higher)
-    input_df.internet=encoder.fit(original_df.internet).fit_transform(input_df.internet)
-
+    input_df.sex=encoder.fit(original_df.sex).transform(input_df.sex)
+    input_df.paid=encoder.fit(original_df.paid).transform(input_df.paid)
+    input_df.higher=encoder.fit(original_df.higher).transform(input_df.higher)
+    input_df.internet=encoder.fit(original_df.internet).transform(input_df.internet)
     result = input_df[['age', 'Medu', 'Fedu', 
      'traveltime', 'failures', 'G1', 'G2']]
     scaled_df = st.session_state.scaler.transform(result)
