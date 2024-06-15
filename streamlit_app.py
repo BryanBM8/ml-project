@@ -2,6 +2,7 @@ import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
+from menu import show_menu
 import pickle
 import sklearn
 from sklearn.preprocessing import Normalizer
@@ -10,22 +11,7 @@ from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 from sklearn.pipeline import Pipeline
 import joblib
 import matplotlib.pyplot as plt
-
-"""
-# ML Project - Student Performance score prediction
-
-Anggota:
-- Bryan Mulia
-- Jasson Widiarta
-- Kasimirus Derryl Odja
-- Joel Wilson Suwanto
-- Irving Masahiro Samin
-
-Repository: [Github](https://github.com/Jasson9/ml-project)
-"""
-st.sidebar.header("Processing Options")
-model_option = st.sidebar.selectbox("Model:", {"Random Forest":"RandomForest.pkl", "SVM":"SVM.pkl", "Gradient Boosting":"gradient_boosting.pkl"})
-scaler_option = st.sidebar.selectbox("Scaler Option:", {"Standard Scaler":"standard.pkl", "Robust Scaler":"robust.pkl", "MinMax Scaler":"minmax.pkl"})
+from streamlit_option_menu import option_menu
 
 
 def random_button_callback(set_value_only=False):
@@ -66,6 +52,8 @@ internet_options = {"Yes":"yes", "No":"no"}
 
 def main_render():
     state = st.session_state;
+    model_option = st.sidebar.selectbox("Model:", {"Random Forest":"RandomForest.pkl", "SVM":"SVM.pkl", "Gradient Boosting":"gradient_boosting.pkl"})
+    scaler_option = st.sidebar.selectbox("Scaler Option:", {"Standard Scaler":"standard.pkl", "Robust Scaler":"robust.pkl", "MinMax Scaler":"minmax.pkl"})
     st.sidebar.header("Parameters")
     sex = st.sidebar.selectbox("Sex:", sex_options.keys(), 0 if 'sex_idx' not in state else state.sex_idx)
     age = st.sidebar.slider("Age", 6,  24, 6 if 'age' not in state else state.age)
@@ -145,7 +133,7 @@ def predict(param_df,model_option,scaler_option):
     input_df.higher=encoder.fit(original_df.higher).transform(input_df.higher)
     input_df.internet=encoder.fit(original_df.internet).transform(input_df.internet)
     result = input_df[['age', 'Medu', 'Fedu', 
-     'traveltime', 'failures', 'G1', 'G2']]
+     'traveltime', 'failures','goout', 'G1', 'G2']]
     scaled_df = st.session_state.scaler.transform(result)
     input_df = input_df.copy()
     input_df[result.columns] = scaled_df
@@ -156,10 +144,9 @@ def predict(param_df,model_option,scaler_option):
     return pred[0]
         
 def main():
-    if 'initialized' not in st.session_state or not st.session_state.initialized:
-        st.session_state.initialized = True
-        random_button_callback(True)
-    main_render()
+        # random_button_callback(True)
+    # main_render()
+    show_menu()
     return 0
 
 if __name__ == '__main__':
