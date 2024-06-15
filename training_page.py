@@ -46,7 +46,7 @@ def training():
         params = dict(params,**dict([(k,st.number_input(k,min_value=r[0],max_value=r[1],value=r[2])) for k,r in param_options.items() 
                        if k in model_options[model_option].__init__.__code__.co_varnames]))
     else:
-        # guess needs to be defined one by one
+        params['cv'] = st.number_input("cv", 2,10,5)
         filtered_params = {k: v for k, v in param_options_grid_search.items() if k in model_options[model_option].__init__.__code__.co_varnames}
         params_df = pd.DataFrame.from_dict(
             filtered_params
@@ -72,13 +72,14 @@ def training():
             else:
                 grid_search_param = dict([(k, edited_param_df[k].tolist()) for k in edited_param_df.columns])
                 grid_search = GridSearchCV(estimator=model_options[model_option](**{k: v for k, v in params.items() if k in model_params and k == 'random_state'})
-                    , param_grid=grid_search_param, cv=5, n_jobs=-1, verbose=2)
+                    , param_grid=grid_search_param, cv=params['cv'], n_jobs=-1, verbose=2)
                 with st.spinner('Training...'):
                     grid_search.fit(state.df.drop('G3',axis=1), state.df['G3'])
                 st.success("Training Done")
                 st.write(f"Best parameters found: {grid_search.best_params_}")
                 state.training_done = True
                 state.model = grid_search.best_estimator_
+                print("accuracy: ", state.model.score(state.x_test, state.y_test))
                 st.write("accuracy: ", state.model.score(state.x_test, state.y_test))
             
 
