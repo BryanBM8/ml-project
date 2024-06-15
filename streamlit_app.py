@@ -99,7 +99,7 @@ def main_render():
     st.sidebar.button('predict on all models', on_click=lambda: pred_all_models(input_df, scaler_options[scaler_option]))
     st.sidebar.button('random predict', on_click=random_button_callback)
     if 'result' in st.session_state:
-        st.write("prediction result: ",st.session_state.result)
+        st.write("prediction result (G3): ",st.session_state.result)
     # if 'actual_result' in st.session_state and st.session_state.actual_result is not None:
     #     st.write("actual result: ",st.session_state.actual_result)
         
@@ -119,6 +119,7 @@ def show_plot():
     y_pred = st.session_state.y_pred
     fig1, ax1 = plt.subplots()
     ax1.bar(model_options.keys(), y_pred)
+    ax1.set_ylabel('G3')
     st.pyplot(fig1)
 
 def predict(param_df,model_option,scaler_option):
