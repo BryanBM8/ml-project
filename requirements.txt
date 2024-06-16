@@ -6,3 +6,4 @@ joblib
 matplotlib
 streamlit_option_menu
 seaborn
+io
