@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 def eda():
     st.title("Exploratory Data Analysis")
-    df=pd.read_csv('student-mat.csv')
+    df=pd.read_csv('student-mat.csv',sep=';')
     st.write("Dataframe:")
     st.write(df)
     st.write("Informasi Dataframe:")
