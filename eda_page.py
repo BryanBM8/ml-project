@@ -3,17 +3,17 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
-import io
+
 def eda():
     st.title("Exploratory Data Analysis")
     df=pd.read_csv('student-mat.csv',sep=';')
     st.write("Dataframe:")
     st.write(df)
-    st.write("Informasi Dataframe:")
-    buffer = io.StringIO()
-    df.info(buf=buffer)
-    s = buffer.getvalue()
-    st.text(s)
+    st.write("Tipe Data Setiap Kolom:")
+    st.write(df.dtypes)
+
+    st.write("Statistik Deskriptif:")
+    st.write(df.describe())
 
     st.write("Matriks Korelasi")
     numeric_df = df.select_dtypes(include=[float, int])
