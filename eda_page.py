@@ -9,7 +9,10 @@ def eda():
     st.write("Dataframe:")
     st.write(df)
     st.write("Informasi Dataframe:")
-    st.write(df.info())
+    buffer = io.StringIO()
+    df.info(buf=buffer)
+    s = buffer.getvalue()
+    st.text(s)
 
     st.write("Matriks Korelasi")
     numeric_df = df.select_dtypes(include=[float, int])
