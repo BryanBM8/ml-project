@@ -12,7 +12,8 @@ def eda():
     st.write(df.info())
 
     st.write("Matriks Korelasi")
-    correlation_matrix = df.corr()
+    numeric_df = df.select_dtypes(include=[float, int])
+    correlation_matrix = numeric_df.corr()
     fig, ax = plt.subplots(figsize=(12, 8))
     sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
     ax.set_title('Matriks Korelasi')
