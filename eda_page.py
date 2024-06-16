@@ -3,6 +3,7 @@ import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import io
 def eda():
     st.title("Exploratory Data Analysis")
     df=pd.read_csv('student-mat.csv',sep=';')
