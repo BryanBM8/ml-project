@@ -4,6 +4,7 @@ from sklearn.svm import SVR
 from streamlit import session_state as state
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, cross_val_score, KFold, train_test_split
+import pickle
 
 model_options = {"Random Forest": RandomForestRegressor, "Gradient Boosting": GradientBoostingRegressor, "Support Vector Machine": SVR}
 
@@ -79,7 +80,11 @@ def training():
                 st.write(f"Best parameters found: {grid_search.best_params_}")
                 state.training_done = True
                 state.model = grid_search.best_estimator_
-                print("accuracy: ", state.model.score(state.x_test, state.y_test))
+
+            if state.training_done == True:
+                with open('model.pkl', 'wb') as mo:
+                    pickle.dump(state.model, mo)
+                st.session_state.model = state.model
                 st.write("accuracy: ", state.model.score(state.x_test, state.y_test))
             
 
