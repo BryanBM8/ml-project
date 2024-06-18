@@ -33,13 +33,12 @@ def preprocessing():
         state.preprocessing_done = False
         state.scaler_option = scaler
         state.encoder = {}
-        encoder = LabelEncoder()
         
         for column in ['paid', 'higher', 'internet']:
             df[column] = df[column].map(binary_map)
 
         for column in ['address','sex','paid','higher','internet']:
-            state.encoder[column] = encoder.fit(df[column])
+            state.encoder[column] = LabelEncoder().fit(df[column])
             df[column]=state.encoder[column].transform(df[column])
 
         num_columns = ['age', 'Medu', 'Fedu', 'traveltime','failures','goout', 'G1', 'G2']
