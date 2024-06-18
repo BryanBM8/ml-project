@@ -182,9 +182,9 @@ Repository: [Github](https://github.com/Jasson9/ml-project)
 
 
     df = pd.read_csv('student-mat.csv',sep=';')
-    st.markdown('<div class="section-dataset-header">Student Performance Dataset</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header-2">Student Performance Dataset</div>', unsafe_allow_html=True)
     st.markdown("""
-    <div class="section-dataset-content">
+    <div class="section-content-2">
         Dataset yang kami gunakan berasal dari archive.ics.uci.edu dan terdiri dari atas 32 kolom yang berisi 649 baris data
     </div>
     """, unsafe_allow_html=True)
