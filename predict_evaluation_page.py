@@ -69,7 +69,6 @@ def predict_evaluation():
     # st.button('predict', on_click=lambda: predict(input_df))
     if st.button('Predict'):
         for column in ['address','sex','paid','higher','internet']:
-            print(input_df[column])
             input_df[column]=state.encoder[column].transform(input_df[column].astype(str))
         
         num_columns = ['age', 'Medu', 'Fedu', 'traveltime','failures','goout', 'G1', 'G2']
