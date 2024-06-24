@@ -77,7 +77,6 @@ def predict_evaluation():
 
         input_df = input_df.copy()
         input_df[result.columns] = scaled_df
-        st.write(input_df)
         load_model()
         pred=predict(input_df)
         st.write("Predicted result: ", pred)
