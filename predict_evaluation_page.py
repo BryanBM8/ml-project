@@ -69,6 +69,7 @@ def predict_evaluation():
     # st.button('predict', on_click=lambda: predict(input_df))
     if st.button('Predict'):
         for column in ['address','sex','paid','higher','internet']:
+            print(input_df[column])
             input_df[column]=state.encoder[column].transform(input_df[column].astype(str))
         
         num_columns = ['age', 'Medu', 'Fedu', 'traveltime','failures','goout', 'G1', 'G2']
@@ -77,7 +78,6 @@ def predict_evaluation():
 
         input_df = input_df.copy()
         input_df[result.columns] = scaled_df
-        st.write(input_df)
         load_model()
         pred=predict(input_df)
         st.write("Predicted result: ", pred)
