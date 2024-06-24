@@ -3,7 +3,7 @@ from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler, La
 import pandas as pd
 from streamlit import session_state as state
 
-scaler_options ={"Standard Scaler": StandardScaler(), "Robust Scaler": RobustScaler(), "MinMax Scaler":MinMaxScaler()}
+scaler_options = {"Standard Scaler": StandardScaler(), "Robust Scaler": RobustScaler(), "MinMax Scaler": MinMaxScaler()}
 binary_map = {'no': 0, 'yes': 1}
 
 def remove_outliers(df, column):
@@ -12,7 +12,7 @@ def remove_outliers(df, column):
     IQR = Q3 - Q1
     lower_bound = Q1 - 1.5 * IQR
     upper_bound = Q3 + 1.5 * IQR
-    df = df[(df[column] > lower_bound) & (df[column] < upper_bound)]
+    df = df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
     return df
 
 def preprocessing():
@@ -21,13 +21,11 @@ def preprocessing():
     st.title("Preprocessing")
     
     df = pd.read_csv('student-mat.csv', sep=';', usecols=['sex', 'age', 'address', 'Medu', 'Fedu', 
-     'traveltime', 'failures', 'paid', 'higher', 'internet','goout', 'G1', 'G2','G3'])
+     'traveltime', 'failures', 'paid', 'higher', 'internet', 'goout', 'G1', 'G2', 'G3'])
 
-    # st.write("Select the columns you want to include in the model:")
-    # columns = st.multiselect("Select Columns", df.columns)
     st.write("Select the scaler you want to use:")
     scaler = st.selectbox("Select Scaler", list(scaler_options.keys()))
-    remove_outliers_option = st.checkbox("Remove Outliers (not working currently)", False)
+    remove_outliers_option = st.checkbox("Remove Outliers", False)
 
     if st.button("Preprocess"):
         state.preprocessing_done = False
@@ -37,16 +35,18 @@ def preprocessing():
         for column in ['paid', 'higher', 'internet']:
             df[column] = df[column].map(binary_map)
 
-        for column in ['address','sex','paid','higher','internet']:
+        for column in ['address', 'sex', 'paid', 'higher', 'internet']:
             state.encoder[column] = LabelEncoder().fit(df[column])
-            df[column]=state.encoder[column].transform(df[column])
+            df[column] = state.encoder[column].transform(df[column])
 
-        num_columns = ['age', 'Medu', 'Fedu', 'traveltime','failures','goout', 'G1', 'G2']
+        num_columns = ['age', 'Medu', 'Fedu', 'traveltime', 'failures', 'goout', 'G1', 'G2']
+        
+        if remove_outliers_option:
+            for column in num_columns:
+                df = remove_outliers(df, column)
+        
         result = df[num_columns]
         state.scaler = scaler_options[scaler].fit(result)
-
-        if remove_outliers_option:
-            result= remove_outliers(result, result.columns)
         scaled_df = state.scaler.transform(result)
 
         df = df.copy()
