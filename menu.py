@@ -22,6 +22,6 @@ def router(key,page="Home"):
 
 def show_menu():
     with st.sidebar:
-        menu = option_menu("EduPred Score", ["Home","EDA", "Preprocessing", "Training", "Predict & Evaluation"],
+        menu = option_menu("EduPred Score", ["Home","EDA", "Preprocessing", "Training & Evaluation", "Predict"],
             icons=['house', 'list-task', 'gear', 'cloud-upload'], menu_icon="cast", key="menu", default_index=0)
     router("menu",menu)    
