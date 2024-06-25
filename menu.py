@@ -14,9 +14,9 @@ def router(key,page="Home"):
             eda()
         case "Preprocessing":
             preprocessing()
-        case "Training":
+        case "Training & Evaluation":
             training()
-        case "Predict & Evaluation":
+        case "Predict":
             predict_evaluation()
             
 
