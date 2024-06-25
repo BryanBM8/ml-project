@@ -7,11 +7,11 @@ def home():
 # ML Project - Student Performance score prediction
 
 Anggota:
-- Bryan Mulia
-- Jasson Widiarta
-- Kasimirus Derryl Odja
-- Joel Wilson Suwanto
-- Irving Masahiro Samin
+- 2602054764 - Bryan Mulia
+- 2602057646 - Jasson Widiarta
+- 2602059960 - Kasimirus Derryl Odja
+- 2602077635 - Irving Masahiro Samin
+- 2602050860 - Joel Wilson Suwanto
 
 Repository: [Github](https://github.com/Jasson9/ml-project)
 
